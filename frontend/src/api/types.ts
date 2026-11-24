@@ -27,4 +27,5 @@ export interface HealthResponse {
   keys_configured: number;
   cache_enabled: boolean;
   failure_simulation?: boolean;
+  model?: string;
 }
