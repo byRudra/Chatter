@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     llm_api_keys: Annotated[list[str], NoDecode] = Field(default_factory=list)
     llm_model: str = "groq/llama-3.3-70b-versatile"
     llm_timeout_seconds: float = 30.0
+    cache_ttl_seconds: int = 86_400
+    cache_max_items: int = 1_000
     database_url: str = "sqlite:///./data/app.db"
     allowed_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:3000"]
