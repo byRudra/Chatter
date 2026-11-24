@@ -30,7 +30,12 @@ export function Conversation({ turns, pending, onPickSuggestion }: ConversationP
             return <UserMessage key={turn.id} content={turn.content} />;
           case "assistant":
             return (
-              <AssistantMessage key={turn.id} content={turn.content} metadata={turn.metadata} />
+              <AssistantMessage
+                key={turn.id}
+                content={turn.content}
+                metadata={turn.metadata}
+                simulated={turn.simulated}
+              />
             );
           default:
             return null;
