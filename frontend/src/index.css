@@ -49,6 +49,62 @@
   }
 }
 
+/* Markdown inside assistant replies. */
+.md > * + * {
+  margin-top: 0.75em;
+}
+.md h1,
+.md h2,
+.md h3 {
+  @apply font-medium tracking-tight text-white;
+}
+.md h1 {
+  @apply text-xl;
+}
+.md h2 {
+  @apply text-lg;
+}
+.md h3 {
+  @apply text-base;
+}
+.md ul {
+  @apply list-disc pl-5 marker:text-white/30;
+}
+.md ol {
+  @apply list-decimal pl-5 marker:text-white/40;
+}
+.md li + li {
+  margin-top: 0.25em;
+}
+.md a {
+  @apply text-live underline decoration-live/30 underline-offset-4 hover:decoration-live;
+}
+.md strong {
+  @apply font-semibold text-white;
+}
+.md blockquote {
+  @apply border-l border-white/15 pl-4 text-white/60;
+}
+.md code {
+  @apply rounded-md bg-white/[0.06] px-1.5 py-0.5 font-mono text-[0.85em] text-white/85;
+}
+.md pre {
+  @apply overflow-x-auto rounded-xl bg-black/40 p-4 ring-1 ring-white/[0.06];
+}
+.md pre code {
+  @apply bg-transparent p-0 text-[13px] leading-relaxed;
+}
+.md table {
+  @apply block w-full overflow-x-auto text-[14px];
+}
+.md th,
+.md td {
+  @apply border-b border-white/[0.06] px-3 py-1.5 text-left;
+}
+.md hr {
+  @apply border-white/[0.08];
+}
+
 /* Film grain: fixed, non-interactive, never on a scrolling layer. */
 .grain::after {
   content: "";
