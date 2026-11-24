@@ -1,11 +1,20 @@
-export function Logo({ className = "" }: { className?: string }) {
+/** Wordmark: a single signal dot inside a dark tile. */
+export function LogoMark({ className = "h-7 w-7" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <span aria-hidden className="relative flex h-5 w-8 items-center">
-        <span className="absolute left-0 h-5 w-5 rounded-full bg-live/90 shadow-[0_0_16px_rgb(52_211_153/0.55)]" />
-        <span className="absolute left-3 h-5 w-5 rounded-full bg-cache/80 mix-blend-screen shadow-[0_0_16px_rgb(167_139_250/0.5)]" />
-      </span>
-      <span className="text-[15px] font-semibold tracking-tight">chatter</span>
+    <span
+      aria-hidden
+      className={`relative inline-flex shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-bone-900 ${className}`}
+    >
+      <span className="h-2 w-2 rounded-full bg-signal-400" />
+    </span>
+  );
+}
+
+export function Logo() {
+  return (
+    <span className="inline-flex items-center gap-2.5">
+      <LogoMark />
+      <span className="font-display text-[17px] font-semibold tracking-[-0.02em] text-bone-50">chatter</span>
     </span>
   );
 }

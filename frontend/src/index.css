@@ -5,58 +5,66 @@
 @layer base {
   :root {
     color-scheme: dark;
-    --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
   }
 
   html,
   body {
-    @apply bg-ink font-sans text-white antialiased;
-    font-feature-settings: "ss01", "cv11";
+    @apply bg-canvas font-sans text-bone-100 antialiased;
   }
 
   ::selection {
-    @apply bg-live/30 text-white;
+    @apply bg-signal-400/25 text-white;
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgb(255 255 255 / 0.12) transparent;
+    scrollbar-color: rgb(255 255 255 / 0.1) transparent;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-white/30 ring-offset-2 ring-offset-ink;
+    @apply outline-none ring-2 ring-signal-400/40 ring-offset-2 ring-offset-canvas;
   }
 }
 
 @layer components {
-  /* Double-bezel: an outer tray holding an inner plate with concentric radii. */
-  .bezel {
-    @apply rounded-bezel bg-white/[0.025] p-1.5 ring-1 ring-white/[0.07];
+  /* Small uppercase section label used across the inspector. */
+  .label {
+    @apply font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-bone-500;
   }
-  .bezel-core {
-    @apply rounded-[calc(1.75rem-0.375rem)] bg-ink-850;
+
+  /* Machined surface: hairline edge + a 1px top highlight instead of a glow. */
+  .surface {
+    @apply rounded-2xl border border-white/[0.07] bg-bone-900/70;
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.06),
-      0 24px 48px -24px rgb(0 0 0 / 0.6);
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 12px 32px -16px rgb(0 0 0 / 0.7);
   }
 
-  .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full bg-white/[0.04] px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-white/55 ring-1 ring-white/[0.08];
-  }
-
-  .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full bg-white/[0.035] px-2.5 py-1 font-mono text-[11px] leading-none text-white/60 ring-1 ring-white/[0.07];
+  .field {
+    @apply w-full rounded-xl border border-white/[0.07] bg-bone-900/60 px-3.5 py-2.5 text-[13.5px] text-bone-100 transition-colors duration-300 ease-out placeholder:text-bone-600 hover:border-white/[0.12] focus:border-signal-400/40 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0;
   }
 }
 
+/* Engineering-paper dot grid, fixed and non-interactive. */
+.dot-grid {
+  background-image: radial-gradient(rgb(236 230 217 / 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 100%);
+}
+
 /* Markdown inside assistant replies. */
+.md {
+  @apply text-[15px] leading-7 text-bone-200;
+}
 .md > * + * {
-  margin-top: 0.75em;
+  margin-top: 0.85em;
 }
 .md h1,
 .md h2,
 .md h3 {
-  @apply font-medium tracking-tight text-white;
+  @apply font-medium tracking-tight text-bone-50;
 }
 .md h1 {
   @apply text-xl;
@@ -68,28 +76,28 @@
   @apply text-base;
 }
 .md ul {
-  @apply list-disc pl-5 marker:text-white/30;
+  @apply list-disc pl-5 marker:text-bone-600;
 }
 .md ol {
-  @apply list-decimal pl-5 marker:text-white/40;
+  @apply list-decimal pl-5 marker:text-bone-500;
 }
 .md li + li {
-  margin-top: 0.25em;
+  margin-top: 0.3em;
 }
 .md a {
-  @apply text-live underline decoration-live/30 underline-offset-4 hover:decoration-live;
+  @apply text-signal-300 underline decoration-signal-300/30 underline-offset-4 hover:decoration-signal-300;
 }
 .md strong {
-  @apply font-semibold text-white;
+  @apply font-semibold text-bone-50;
 }
 .md blockquote {
-  @apply border-l border-white/15 pl-4 text-white/60;
+  @apply border-l-2 border-bone-700 pl-4 text-bone-400;
 }
 .md code {
-  @apply rounded-md bg-white/[0.06] px-1.5 py-0.5 font-mono text-[0.85em] text-white/85;
+  @apply rounded-md bg-bone-800/80 px-1.5 py-0.5 font-mono text-[0.85em] text-bone-200;
 }
 .md pre {
-  @apply overflow-x-auto rounded-xl bg-black/40 p-4 ring-1 ring-white/[0.06];
+  @apply overflow-x-auto rounded-xl border border-white/[0.06] bg-bone-900 p-4;
 }
 .md pre code {
   @apply bg-transparent p-0 text-[13px] leading-relaxed;
@@ -103,17 +111,6 @@
 }
 .md hr {
   @apply border-white/[0.08];
-}
-
-/* Film grain: fixed, non-interactive, never on a scrolling layer. */
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {
