@@ -58,3 +58,4 @@ class HealthResponse(BaseModel):
     status: Literal["ok"]
     keys_configured: int
     cache_enabled: bool
+    failure_simulation: bool

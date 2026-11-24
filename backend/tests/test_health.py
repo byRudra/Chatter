@@ -2,7 +2,19 @@ def test_health_reports_key_pool_and_cache(client):
     response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "keys_configured": 2, "cache_enabled": True}
+    body = response.json()
+    assert {k: body[k] for k in ("status", "keys_configured", "cache_enabled")} == {
+        "status": "ok",
+        "keys_configured": 2,
+        "cache_enabled": True,
+    }
+    assert body["failure_simulation"] is True
+
+
+def test_health_reports_disabled_failure_simulation(make_client):
+    client = make_client(enable_failure_simulation=False)
+
+    assert client.get("/health").json()["failure_simulation"] is False
 
 
 def test_health_counts_every_configured_key(make_client):
