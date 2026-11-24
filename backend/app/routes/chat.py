@@ -7,7 +7,7 @@ from fastapi.concurrency import run_in_threadpool
 from app.config import Settings
 from app.db import SessionStore, utc_now
 from app.deps import get_gateway, get_settings_dep, get_store
-from app.gateway.service import Gateway
+from app.gateway.service import Gateway, ProvidersUnavailable
 from app.gateway.simulation import FailurePlan, InvalidSimulationHeader, parse_failure_header
 from app.schemas import ChatMetadata, ChatRequest, ChatResponse
 
@@ -41,7 +41,11 @@ async def chat(
         {"role": "user", "content": body.message},
     ]
 
-    completion = await gateway.complete(messages, failure_plan)
+    try:
+        completion = await gateway.complete(messages, failure_plan)
+    except ProvidersUnavailable as exc:
+        # Nothing has been written yet, so the failed turn never reaches the history.
+        raise HTTPException(status_code=503, detail="all providers unavailable") from exc
 
     metadata = ChatMetadata(
         resolution_source=completion.resolution_source,
