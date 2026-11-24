@@ -77,7 +77,7 @@ def make_settings(tmp_path):
     def _make(**overrides: Any) -> Settings:
         values: dict[str, Any] = {
             "llm_api_keys": ["test-key-one", "test-key-two"],
-            "llm_model": "groq/llama-3.3-70b-versatile",
+            "llm_model": "groq/openai/gpt-oss-120b",
             "database_url": f"sqlite:///{tmp_path / 'app.db'}",
             "allowed_origins": ["http://localhost:3000"],
             "enable_failure_simulation": True,

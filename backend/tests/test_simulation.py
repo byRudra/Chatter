@@ -53,7 +53,7 @@ def test_plan_is_cleared_after_the_request():
     ],
 )
 def test_simulated_errors_are_litellm_provider_errors(status, error_type):
-    error = simulated_error(status, "groq/llama-3.3-70b-versatile")
+    error = simulated_error(status, "groq/openai/gpt-oss-120b")
 
     assert isinstance(error, error_type)
     assert error.status_code == status
