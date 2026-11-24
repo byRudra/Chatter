@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from app.config import Settings, get_settings
 from app.db import SessionStore
 from app.errors import register_error_handlers
-from app.routes import health
+from app.routes import health, sessions
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -25,6 +25,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app = FastAPI(title="Chatter API", version="1.0.0", lifespan=lifespan)
     register_error_handlers(app)
     app.include_router(health.router)
+    app.include_router(sessions.router)
     return app
 
 
