@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getHealth } from "../api/client";
 import type { HealthResponse } from "../api/types";
-import type { ConnectionState } from "../components/IslandHeader";
+import type { ConnectionState } from "../components/StatusDot";
 
 const HEALTHY_POLL_MS = 30_000;
 const UNHEALTHY_POLL_MS = 5_000;

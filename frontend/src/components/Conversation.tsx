@@ -51,7 +51,7 @@ export function Conversation({ turns, pending, onPickSuggestion, onRetry }: Conv
   }
 
   return (
-    <div className="flex flex-col gap-5 py-4" aria-live="polite">
+    <div className="flex flex-col gap-8 py-8" aria-live="polite">
       {turns.map((turn) => (
         <Reveal key={turn.id}>{renderTurn(turn)}</Reveal>
       ))}

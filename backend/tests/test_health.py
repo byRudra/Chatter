@@ -9,6 +9,7 @@ def test_health_reports_key_pool_and_cache(client):
         "cache_enabled": True,
     }
     assert body["failure_simulation"] is True
+    assert body["model"] == "groq/openai/gpt-oss-120b"
 
 
 def test_health_reports_disabled_failure_simulation(make_client):

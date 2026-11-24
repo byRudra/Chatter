@@ -25,6 +25,7 @@ def health(
         status="ok",
         keys_configured=gateway.keys_configured,
         cache_enabled=gateway.cache_enabled,
-        # Extra field so the UI can tell whether X-Simulate-Failure will be honoured.
+        # Extra fields: whether X-Simulate-Failure is honoured, and the configured model.
         failure_simulation=settings.enable_failure_simulation,
+        model=gateway.model,
     )

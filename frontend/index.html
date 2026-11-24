@@ -3,9 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#050505" />
+    <meta name="theme-color" content="#f3f1ec" />
     <meta name="description" content="Chatter: a resilient LLM chat that shows how every reply was served." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Apply the saved (or system) theme before first paint to avoid a flash. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("chatter-theme");
+          var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (dark) {
+            document.documentElement.classList.add("dark");
+            document.querySelector('meta[name="theme-color"]').setAttribute("content", "#0f0e0c");
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>Chatter</title>
     <!-- Runtime config (API base URL). Rewritten at container start; empty in dev. -->
     <script src="/config.js"></script>

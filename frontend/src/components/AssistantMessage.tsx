@@ -3,6 +3,7 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { ChatMetadata } from "../api/types";
+import { LogoMark } from "./Logo";
 import { MetaStrip } from "./MetaStrip";
 
 interface AssistantMessageProps {
@@ -25,23 +26,29 @@ export function AssistantMessage({ content, metadata, simulated }: AssistantMess
   }
 
   return (
-    <article data-testid="assistant-message" className="group/msg bezel max-w-[44rem]">
-      <div className="bezel-core relative px-5 py-4 sm:px-6 sm:py-5">
-        <button
-          type="button"
-          onClick={copy}
-          aria-label={copied ? "Copied" : "Copy reply"}
-          className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-white/40 opacity-0 ring-1 ring-transparent transition-all duration-500 ease-spring hover:bg-white/[0.06] hover:text-white/80 hover:ring-white/[0.08] focus-visible:opacity-100 group-hover/msg:opacity-100"
-        >
-          {copied ? <Check size={13} weight="light" /> : <Copy size={13} weight="light" />}
-        </button>
-        <div className="md pr-6 [overflow-wrap:anywhere] text-[15px] leading-relaxed text-white/90">
+    <div className="group/msg flex gap-3.5">
+      <LogoMark className="mt-0.5 h-7 w-7" />
+      <article data-testid="assistant-message" className="min-w-0 flex-1">
+        <div className="md [overflow-wrap:anywhere]">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </div>
-        <div className="mt-4 border-t border-white/[0.05] pt-3.5">
-          <MetaStrip metadata={metadata} simulated={simulated} />
+        <div className="mt-3">
+          <MetaStrip
+            metadata={metadata}
+            simulated={simulated}
+            trailing={
+              <button
+                type="button"
+                onClick={copy}
+                aria-label={copied ? "Copied" : "Copy reply"}
+                className="flex h-6 w-6 items-center justify-center rounded-md text-ink-500 opacity-0 transition-all duration-300 ease-out hover:bg-ink-200 hover:text-ink-800 focus-visible:opacity-100 active:scale-[0.94] group-hover/msg:opacity-100"
+              >
+                {copied ? <Check size={13} /> : <Copy size={13} />}
+              </button>
+            }
+          />
         </div>
-      </div>
-    </article>
+      </article>
+    </div>
   );
 }

@@ -1,12 +1,13 @@
-import { Flask, X } from "@phosphor-icons/react";
+import { X } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
 import { type FormEvent, useState } from "react";
-import { Panel } from "./Panel";
+import { SPRING } from "./Reveal";
 
 const SCENARIOS = [
   { header: "key_1=429", title: "Rate-limit key_1", expect: "key_2 answers" },
   { header: "key_1=500", title: "Crash key_1", expect: "key_2 answers" },
-  { header: "key_1=429,key_2=503", title: "Two keys down", expect: "503, nothing saved" },
-  { header: "*=429", title: "Every key down", expect: "503, nothing saved" },
+  { header: "key_1=429,key_2=503", title: "Two keys down", expect: "503, not saved" },
+  { header: "*=429", title: "Every key down", expect: "503, not saved" },
 ];
 
 interface FailureLabProps {
@@ -25,47 +26,63 @@ export function FailureLab({ armed, onArm, enabledOnServer }: FailureLabProps) {
   }
 
   return (
-    <Panel
-      icon={Flask}
-      title="Failure lab"
-      aside={
-        <span className={`chip ${armed ? "text-warn ring-warn/25" : ""}`}>
+    <div>
+      <div className="flex items-center justify-between">
+        <p className="label">Failure lab</p>
+        <span className={`font-mono text-[11px] ${armed ? "text-flare-700" : "text-ink-500"}`}>
           {armed ? "armed" : "idle"}
         </span>
-      }
-    >
-      <p className="text-[12px] leading-relaxed text-white/40">
-        Sends <code className="font-mono text-white/60">X-Simulate-Failure</code> with your next
-        message only, so you can watch the key pool fail over.
+      </div>
+      <p className="mt-2 text-[12px] leading-relaxed text-ink-500">
+        Adds <code className="font-mono text-ink-600">X-Simulate-Failure</code> to your next message
+        only.
       </p>
 
       {enabledOnServer === false && (
-        <p className="mt-3 rounded-xl bg-warn/[0.06] px-3 py-2 text-[12px] text-warn/90 ring-1 ring-warn/20">
-          Simulation is disabled on this server (ENABLE_FAILURE_SIMULATION=false).
+        <p className="mt-3 border-l-2 border-flare-400/50 pl-3 text-[12px] text-flare-700/90">
+          Disabled on this server (ENABLE_FAILURE_SIMULATION=false).
         </p>
       )}
 
-      <ul className="mt-4 grid grid-cols-2 gap-2">
+      <ul className="mt-3 space-y-1" role="radiogroup" aria-label="Failure scenario">
         {SCENARIOS.map((scenario) => {
           const active = armed === scenario.header;
           return (
             <li key={scenario.header}>
               <button
                 type="button"
-                aria-pressed={active}
+                role="radio"
+                aria-checked={active}
+                aria-label={scenario.title}
                 onClick={() => onArm(active ? null : scenario.header)}
-                className={`h-full w-full rounded-2xl px-3 py-2.5 text-left ring-1 transition-all duration-500 ease-spring active:scale-[0.98] ${
-                  active
-                    ? "bg-warn/[0.08] ring-warn/30"
-                    : "bg-white/[0.025] ring-white/[0.06] hover:bg-white/[0.05]"
-                }`}
+                className="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors duration-300 ease-out hover:bg-ink-900/[0.03] active:scale-[0.99]"
               >
-                <span className="block text-[13px] text-white/85">{scenario.title}</span>
-                <span className="mt-0.5 block font-mono text-[10.5px] text-white/35">
-                  {scenario.header}
+                {active && (
+                  <motion.span
+                    layoutId="armed-scenario"
+                    transition={SPRING}
+                    className="absolute inset-0 rounded-xl border border-flare-400/25 bg-flare-400/[0.06]"
+                  />
+                )}
+                <span
+                  className={`relative flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border ${
+                    active ? "border-flare-500" : "border-ink-400"
+                  }`}
+                >
+                  {active && <span className="h-1.5 w-1.5 rounded-full bg-flare-500" />}
                 </span>
-                <span className={`mt-1 block text-[11px] ${active ? "text-warn" : "text-white/40"}`}>
-                  → {scenario.expect}
+                <span className="relative min-w-0 flex-1">
+                  <span className="block text-[13px] text-ink-800">{scenario.title}</span>
+                  <span className="block font-mono text-[11px] text-ink-500">
+                    {scenario.header}
+                  </span>
+                </span>
+                <span
+                  className={`relative shrink-0 text-[11.5px] ${
+                    active ? "text-flare-700" : "text-ink-500"
+                  }`}
+                >
+                  {scenario.expect}
                 </span>
               </button>
             </li>
@@ -73,7 +90,7 @@ export function FailureLab({ armed, onArm, enabledOnServer }: FailureLabProps) {
         })}
       </ul>
 
-      <form onSubmit={armCustom} className="mt-3 flex items-center gap-2">
+      <form onSubmit={armCustom} className="mt-3 flex gap-2">
         <label htmlFor="custom-failure" className="sr-only">
           Custom X-Simulate-Failure header
         </label>
@@ -81,32 +98,32 @@ export function FailureLab({ armed, onArm, enabledOnServer }: FailureLabProps) {
           id="custom-failure"
           value={custom}
           onChange={(event) => setCustom(event.target.value)}
-          placeholder="custom, e.g. key_2=502"
-          className="min-w-0 flex-1 rounded-full bg-white/[0.03] px-4 py-2 font-mono text-[12px] text-white/85 ring-1 ring-white/[0.06] placeholder:text-white/25 focus:outline-none focus:ring-white/20 focus-visible:ring-offset-0"
+          placeholder="custom: key_2=502"
+          className="field min-w-0 flex-1 font-mono text-[12px]"
         />
         <button
           type="submit"
           disabled={!custom.trim()}
-          className="rounded-full bg-white/[0.06] px-4 py-2 text-[12px] text-white/80 ring-1 ring-white/[0.08] transition-all duration-500 ease-spring hover:bg-white/[0.1] active:scale-[0.98] disabled:opacity-40"
+          className="rounded-xl border border-ink-900/[0.08] px-3.5 text-[12.5px] text-ink-700 transition-colors duration-300 ease-out hover:border-ink-900/[0.16] hover:text-ink-950 active:scale-[0.98] disabled:opacity-40"
         >
           Arm
         </button>
       </form>
-    </Panel>
+    </div>
   );
 }
 
 export function ArmedBadge({ header, onClear }: { header: string; onClear: () => void }) {
   return (
-    <span className="chip bg-warn/[0.08] pr-1 text-warn ring-warn/25">
-      next message simulates {header}
+    <span className="inline-flex items-center gap-1.5 rounded-lg bg-flare-100 py-1 pl-2.5 pr-1 font-mono text-[11px] text-flare-700 ring-1 ring-inset ring-flare-500/20">
+      next: {header}
       <button
         type="button"
         onClick={onClear}
         aria-label="Cancel failure simulation"
-        className="flex h-4 w-4 items-center justify-center rounded-full hover:bg-warn/20"
+        className="flex h-4 w-4 items-center justify-center rounded hover:bg-flare-400/20"
       >
-        <X size={10} weight="light" />
+        <X size={10} weight="bold" />
       </button>
     </span>
   );
