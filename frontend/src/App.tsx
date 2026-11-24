@@ -2,13 +2,16 @@ import { useState } from "react";
 import { AmbientBackground } from "./components/AmbientBackground";
 import { Composer } from "./components/Composer";
 import { Conversation } from "./components/Conversation";
+import { GatewayCard } from "./components/GatewayCard";
 import { IslandHeader } from "./components/IslandHeader";
 import { Intro } from "./components/Intro";
 import { SystemPromptCard } from "./components/SystemPromptCard";
 import { useChat } from "./hooks/useChat";
+import { useHealth } from "./hooks/useHealth";
 
 export default function App() {
   const chat = useChat();
+  const { connection, health } = useHealth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState("");
 
@@ -18,7 +21,7 @@ export default function App() {
     <div className="grain relative min-h-[100dvh] bg-ink text-white">
       <AmbientBackground />
       <IslandHeader
-        connection="checking"
+        connection={connection}
         onNewChat={chat.reset}
         newChatDisabled={chat.pending}
         menuOpen={menuOpen}
@@ -29,6 +32,7 @@ export default function App() {
         <aside className="hidden min-h-0 flex-col gap-5 overflow-y-auto pb-2 lg:flex">
           <Intro sessionId={chat.sessionId} />
           <SystemPromptCard value={systemPrompt} onChange={setSystemPrompt} />
+          <GatewayCard connection={connection} health={health} turns={chat.turns} />
         </aside>
 
         <section className="flex min-h-0 flex-col" aria-label="Conversation">
