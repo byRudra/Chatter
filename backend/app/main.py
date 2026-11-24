@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import Settings, get_settings
 from app.db import SessionStore
 from app.errors import register_error_handlers
+from app.gateway.service import Gateway
 from app.routes import health, sessions
 
 
@@ -21,6 +22,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         store.init_schema()
         app.state.settings = settings
         app.state.store = store
+        app.state.gateway = Gateway(settings)
         yield
 
     app = FastAPI(title="Chatter API", version="1.0.0", lifespan=lifespan)
