@@ -32,6 +32,7 @@ export default function App() {
               turns={chat.turns}
               pending={chat.pending}
               onPickSuggestion={(text) => void chat.send(text)}
+              onRetry={(text) => void chat.send(text)}
             />
           </div>
           <div className="pt-3">
