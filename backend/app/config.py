@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=("../.env", ".env"), extra="ignore")
 
     llm_api_keys: Annotated[list[str], NoDecode] = Field(default_factory=list)
-    llm_model: str = "groq/llama-3.3-70b-versatile"
+    llm_model: str = "groq/openai/gpt-oss-120b"
     llm_timeout_seconds: float = 30.0
     cache_ttl_seconds: int = 86_400
     cache_max_items: int = 1_000

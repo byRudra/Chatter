@@ -76,7 +76,7 @@ Everything is configured with environment variables. `.env.example` lists them a
 | Variable | Purpose |
 |---|---|
 | `LLM_API_KEYS` | Comma-separated key pool (at least 2). Ids are `key_1`, `key_2`, … in this order |
-| `LLM_MODEL` | LiteLLM model string, default `groq/llama-3.3-70b-versatile` |
+| `LLM_MODEL` | LiteLLM model string, default `groq/openai/gpt-oss-120b` |
 | `DATABASE_URL` | SQLite location, e.g. `sqlite:////data/app.db` |
 | `ALLOWED_ORIGINS` | Comma-separated CORS origins |
 | `ENABLE_FAILURE_SIMULATION` | `true` enables the `X-Simulate-Failure` header |
@@ -217,7 +217,7 @@ request, along with the frontend build and a Docker Compose smoke test.
 
 - **Editor:** VS Code
 - **AI tools:** Claude Code (Anthropic), used for pair programming, planning and reviewing
-- **Model provider:** Groq (`llama-3.3-70b-versatile`) through LiteLLM
+- **Model provider:** Groq (`openai/gpt-oss-120b`) through LiteLLM
 
 ## 6. Bonus features
 

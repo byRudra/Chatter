@@ -9,7 +9,7 @@ def test_chat_response_matches_contract(send):
     assert body["reply"] == "Echo: What is the capital of France?"
     meta = body["metadata"]
     assert meta["resolution_source"] == "LIVE_INFERENCE"
-    assert meta["model"] == "groq/llama-3.3-70b-versatile"
+    assert meta["model"] == "groq/openai/gpt-oss-120b"
     assert isinstance(meta["latency_ms"], int) and meta["latency_ms"] >= 0
     assert isinstance(meta["input_tokens"], int) and meta["input_tokens"] > 0
     assert isinstance(meta["output_tokens"], int) and meta["output_tokens"] > 0
