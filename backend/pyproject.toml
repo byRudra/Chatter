@@ -15,4 +15,8 @@ select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-filterwarnings = ["ignore::DeprecationWarning"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    # LiteLLM's mock responses trip pydantic's serializer type checks; harmless.
+    "ignore:Pydantic serializer warnings:UserWarning",
+]
