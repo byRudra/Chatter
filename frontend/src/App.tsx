@@ -77,7 +77,7 @@ export default function App() {
         </aside>
 
         <section className="flex min-h-0 flex-col" aria-label="Conversation">
-          <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+          <div className="min-h-0 flex-1 overflow-y-auto pr-1 [mask-image:linear-gradient(to_bottom,transparent,black_28px)]">
             <Conversation
               turns={chat.turns}
               pending={chat.pending}

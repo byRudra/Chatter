@@ -35,7 +35,7 @@ export function AssistantMessage({ content, metadata, simulated }: AssistantMess
         >
           {copied ? <Check size={13} weight="light" /> : <Copy size={13} weight="light" />}
         </button>
-        <div className="md pr-6 text-[15px] leading-relaxed text-white/90">
+        <div className="md pr-6 [overflow-wrap:anywhere] text-[15px] leading-relaxed text-white/90">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </div>
         <div className="mt-4 border-t border-white/[0.05] pt-3.5">
