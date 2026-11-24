@@ -11,7 +11,7 @@ export function SystemPromptCard({ value, onChange }: SystemPromptCardProps) {
         <label htmlFor="system-prompt" className="label">
           System prompt
         </label>
-        <span className={`font-mono text-[11px] ${active ? "text-signal-300" : "text-bone-500"}`}>
+        <span className={`font-mono text-[11px] ${active ? "text-signal-700" : "text-ink-500"}`}>
           {active ? "custom" : "default"}
         </span>
       </div>
@@ -25,7 +25,7 @@ export function SystemPromptCard({ value, onChange }: SystemPromptCardProps) {
         placeholder="Answer like a patient teacher, in under 80 words."
         className="field resize-none leading-relaxed"
       />
-      <p className="text-[12px] leading-relaxed text-bone-500">
+      <p className="text-[12px] leading-relaxed text-ink-500">
         Sent with your next message and kept for the session.
       </p>
     </div>

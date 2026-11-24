@@ -12,7 +12,7 @@ function describe(status: number) {
     return {
       Icon: CloudSlash,
       border: "border-flare-400/50",
-      tone: "text-flare-300",
+      tone: "text-flare-700",
       title: "All providers are unavailable",
       body: "Every API key in the pool failed for this request. Nothing was added to the conversation.",
     };
@@ -21,7 +21,7 @@ function describe(status: number) {
     return {
       Icon: WarningCircle,
       border: "border-coral-400/50",
-      tone: "text-coral-300",
+      tone: "text-coral-700",
       title: "That message couldn't be sent",
       body: "The server rejected the request.",
     };
@@ -30,7 +30,7 @@ function describe(status: number) {
     return {
       Icon: WifiSlash,
       border: "border-coral-400/50",
-      tone: "text-coral-300",
+      tone: "text-coral-700",
       title: "Can't reach the server",
       body: "If it was idle it may be waking up. Give it a few seconds and retry.",
     };
@@ -38,7 +38,7 @@ function describe(status: number) {
   return {
     Icon: WarningCircle,
     border: "border-coral-400/50",
-    tone: "text-coral-300",
+    tone: "text-coral-700",
     title: `Request failed (${status})`,
     body: "The request didn't complete.",
   };
@@ -53,9 +53,9 @@ export function ErrorMessage({ status, detail, onRetry, retryDisabled }: ErrorMe
         <Icon size={16} />
         {title}
       </p>
-      <p className="mt-1 max-w-[60ch] text-[14px] leading-relaxed text-bone-400">{body}</p>
+      <p className="mt-1 max-w-[60ch] text-[14px] leading-relaxed text-ink-600">{body}</p>
       <div className="mt-2.5 flex flex-wrap items-center gap-3">
-        <span className="break-all font-mono text-[11.5px] text-bone-500">
+        <span className="break-all font-mono text-[11.5px] text-ink-500">
           {status > 0 ? `HTTP ${status} / ` : ""}
           {detail}
         </span>
@@ -63,7 +63,7 @@ export function ErrorMessage({ status, detail, onRetry, retryDisabled }: ErrorMe
           type="button"
           onClick={onRetry}
           disabled={retryDisabled}
-          className="group inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] px-2.5 py-1 text-[12.5px] text-bone-300 transition-colors duration-300 ease-out hover:border-white/[0.16] hover:text-bone-50 active:scale-[0.98] disabled:opacity-40"
+          className="group inline-flex items-center gap-1.5 rounded-lg border border-ink-900/[0.08] px-2.5 py-1 text-[12.5px] text-ink-700 transition-colors duration-300 ease-out hover:border-ink-900/[0.16] hover:text-ink-950 active:scale-[0.98] disabled:opacity-40"
         >
           <ArrowClockwise
             size={13}

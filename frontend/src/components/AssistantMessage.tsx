@@ -41,7 +41,7 @@ export function AssistantMessage({ content, metadata, simulated }: AssistantMess
                 type="button"
                 onClick={copy}
                 aria-label={copied ? "Copied" : "Copy reply"}
-                className="flex h-6 w-6 items-center justify-center rounded-md text-bone-500 opacity-0 transition-all duration-300 ease-out hover:bg-bone-800 hover:text-bone-200 focus-visible:opacity-100 active:scale-[0.94] group-hover/msg:opacity-100"
+                className="flex h-6 w-6 items-center justify-center rounded-md text-ink-500 opacity-0 transition-all duration-300 ease-out hover:bg-ink-200 hover:text-ink-800 focus-visible:opacity-100 active:scale-[0.94] group-hover/msg:opacity-100"
               >
                 {copied ? <Check size={13} /> : <Copy size={13} />}
               </button>

@@ -3,9 +3,9 @@ import { memo } from "react";
 export type ConnectionState = "checking" | "online" | "offline";
 
 const TONE: Record<ConnectionState, string> = {
-  checking: "bg-flare-400",
-  online: "bg-signal-400",
-  offline: "bg-coral-400",
+  checking: "bg-flare-500",
+  online: "bg-signal-500",
+  offline: "bg-coral-500",
 };
 
 /** Breathing status indicator; the ring animation is pure CSS and isolated here. */

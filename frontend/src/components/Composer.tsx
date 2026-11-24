@@ -47,7 +47,7 @@ export function Composer({ onSend, busy, footer }: ComposerProps) {
   return (
     <form
       onSubmit={submit}
-      className="surface transition-colors duration-300 ease-out focus-within:border-white/[0.14]"
+      className="surface transition-colors duration-300 ease-out focus-within:border-ink-900/[0.14]"
     >
       <label htmlFor="chat-input" className="sr-only">
         Message
@@ -61,19 +61,19 @@ export function Composer({ onSend, busy, footer }: ComposerProps) {
         onKeyDown={onKeyDown}
         rows={1}
         placeholder="Message chatter…"
-        className="block max-h-[220px] w-full resize-none bg-transparent px-4 pb-1 pt-3.5 text-[15px] leading-7 text-bone-100 placeholder:text-bone-600 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="block max-h-[220px] w-full resize-none bg-transparent px-4 pb-1 pt-3.5 text-[15px] leading-7 text-ink-900 placeholder:text-ink-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
       />
       <div className="flex items-center gap-3 px-3 pb-3 pl-4">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
           {footer ?? (
-            <span className="hidden font-mono text-[11px] text-bone-500 sm:inline">
+            <span className="hidden font-mono text-[11px] text-ink-500 sm:inline">
               Enter to send, Shift+Enter for a new line
             </span>
           )}
         </div>
         {nearLimit && (
           <span
-            className={`font-mono text-[11px] ${overLimit ? "text-coral-400" : "text-flare-400"}`}
+            className={`font-mono text-[11px] ${overLimit ? "text-coral-600" : "text-flare-600"}`}
             aria-live="polite"
           >
             {length}/{MAX_MESSAGE_CHARS}
@@ -84,7 +84,7 @@ export function Composer({ onSend, busy, footer }: ComposerProps) {
           data-testid="send-button"
           aria-label="Send message"
           disabled={!canSend}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-bone-100 text-bone-900 transition-all duration-300 ease-out hover:bg-white active:scale-[0.94] disabled:bg-bone-800 disabled:text-bone-600"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ink-900 text-ink-100 transition-all duration-300 ease-out hover:bg-ink-800 active:scale-[0.94] disabled:bg-ink-200 disabled:text-ink-400"
         >
           <ArrowUp size={16} weight="bold" />
         </button>

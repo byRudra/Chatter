@@ -49,7 +49,7 @@ export function GatewayStatus({ connection, health, turns }: GatewayStatusProps)
       <div>
         <div className="flex items-center justify-between">
           <p className="label">Gateway</p>
-          <span className="inline-flex items-center gap-2 text-[12px] text-bone-400">
+          <span className="inline-flex items-center gap-2 text-[12px] text-ink-600">
             <StatusDot state={connection} />
             {STATUS_LABEL[connection]}
           </span>
@@ -57,15 +57,15 @@ export function GatewayStatus({ connection, health, turns }: GatewayStatusProps)
         <dl className="mt-3 space-y-2">
           {rows.map((row) => (
             <div key={row.label} className="flex items-baseline justify-between gap-4">
-              <dt className="text-[13px] text-bone-500">{row.label}</dt>
-              <dd className="truncate font-mono text-[12px] text-bone-300" title={row.value}>
+              <dt className="text-[13px] text-ink-500">{row.label}</dt>
+              <dd className="truncate font-mono text-[12px] text-ink-700" title={row.value}>
                 {row.value}
               </dd>
             </div>
           ))}
         </dl>
         {connection === "offline" && (
-          <p className="mt-3 text-[12px] leading-relaxed text-bone-500">
+          <p className="mt-3 text-[12px] leading-relaxed text-ink-500">
             The backend isn't answering. A sleeping free-tier host can take a moment to wake.
           </p>
         )}
@@ -73,19 +73,19 @@ export function GatewayStatus({ connection, health, turns }: GatewayStatusProps)
 
       <div>
         <p className="label">This session</p>
-        <dl className="mt-3 grid grid-cols-2 overflow-hidden rounded-xl border border-white/[0.06]">
+        <dl className="mt-3 grid grid-cols-2 overflow-hidden rounded-2xl border border-ink-900/[0.05] bg-surface shadow-soft">
           {stats.map((stat, i) => (
             <div
               key={stat.label}
-              className={`px-3.5 py-3 ${i % 2 === 1 ? "border-l border-white/[0.06]" : ""} ${
-                i > 1 ? "border-t border-white/[0.06]" : ""
+              className={`px-3.5 py-3 ${i % 2 === 1 ? "border-l border-ink-900/[0.06]" : ""} ${
+                i > 1 ? "border-t border-ink-900/[0.06]" : ""
               }`}
             >
-              <dt className="text-[12px] text-bone-500">{stat.label}</dt>
-              <dd className="mt-1 font-mono text-lg tabular-nums leading-none text-bone-50">
+              <dt className="text-[12px] text-ink-500">{stat.label}</dt>
+              <dd className="mt-1 font-mono text-lg tabular-nums leading-none text-ink-950">
                 {stat.value}
               </dd>
-              <dd className="mt-1 font-mono text-[11px] text-bone-500">{stat.sub}</dd>
+              <dd className="mt-1 font-mono text-[11px] text-ink-500">{stat.sub}</dd>
             </div>
           ))}
         </dl>

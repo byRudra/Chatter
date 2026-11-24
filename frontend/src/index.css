@@ -4,50 +4,119 @@
 
 @layer base {
   :root {
+    --canvas: 243 241 236;
+    --surface: 255 255 255;
+    --ink-50: 251 250 248;
+    --ink-100: 244 242 238;
+    --ink-150: 236 233 227;
+    --ink-200: 226 222 214;
+    --ink-300: 205 199 187;
+    --ink-400: 163 156 142;
+    --ink-500: 111 105 93;
+    --ink-600: 90 85 75;
+    --ink-700: 70 66 58;
+    --ink-800: 47 44 39;
+    --ink-900: 31 29 25;
+    --ink-950: 20 19 15;
+    --signal-50: 242 247 241;
+    --signal-100: 227 239 225;
+    --signal-200: 200 223 197;
+    --signal-300: 165 201 161;
+    --signal-400: 127 178 123;
+    --signal-500: 92 154 90;
+    --signal-600: 69 125 69;
+    --signal-700: 53 99 55;
+    --flare-100: 251 234 217;
+    --flare-400: 235 162 92;
+    --flare-500: 217 133 58;
+    --flare-600: 184 105 42;
+    --flare-700: 148 82 31;
+    --coral-100: 249 225 221;
+    --coral-400: 233 140 127;
+    --coral-500: 217 106 91;
+    --coral-600: 189 79 65;
+    --coral-700: 155 61 50;
+    --shadow: 31 29 25;
+    --grid-dot: rgb(31 29 25 / 0.08);
+    color-scheme: light;
+  }
+
+  :root.dark {
+    --canvas: 15 14 12;
+    --surface: 26 24 21;
+    --ink-50: 20 18 16;
+    --ink-100: 25 23 20;
+    --ink-150: 31 29 25;
+    --ink-200: 44 41 37;
+    --ink-300: 72 68 60;
+    --ink-400: 102 97 85;
+    --ink-500: 141 134 120;
+    --ink-600: 162 155 140;
+    --ink-700: 189 181 165;
+    --ink-800: 217 210 195;
+    --ink-900: 236 230 217;
+    --ink-950: 246 242 234;
+    --signal-50: 21 29 20;
+    --signal-100: 28 42 27;
+    --signal-200: 45 74 44;
+    --signal-300: 79 122 76;
+    --signal-400: 127 178 123;
+    --signal-500: 140 196 136;
+    --signal-600: 166 214 162;
+    --signal-700: 191 229 187;
+    --flare-100: 46 34 22;
+    --flare-400: 235 162 92;
+    --flare-500: 237 164 102;
+    --flare-600: 242 180 126;
+    --flare-700: 246 196 154;
+    --coral-100: 47 26 23;
+    --coral-400: 233 140 127;
+    --coral-500: 236 141 128;
+    --coral-600: 240 160 149;
+    --coral-700: 245 181 172;
+    --shadow: 0 0 0;
+    --grid-dot: rgb(236 230 217 / 0.05);
     color-scheme: dark;
   }
 
   html,
   body {
-    @apply bg-canvas font-sans text-bone-100 antialiased;
+    @apply bg-canvas font-sans text-ink-900 antialiased transition-colors duration-500 ease-out;
   }
 
   ::selection {
-    @apply bg-signal-400/25 text-white;
+    @apply bg-signal-200 text-ink-900;
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgb(255 255 255 / 0.1) transparent;
+    scrollbar-color: rgb(var(--ink-900) / 0.14) transparent;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-signal-400/40 ring-offset-2 ring-offset-canvas;
+    @apply outline-none ring-2 ring-signal-500/50 ring-offset-2 ring-offset-canvas;
   }
 }
 
 @layer components {
   /* Small uppercase section label used across the inspector. */
   .label {
-    @apply font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-bone-500;
+    @apply font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-ink-500;
   }
 
   /* Machined surface: hairline edge + a 1px top highlight instead of a glow. */
   .surface {
-    @apply rounded-2xl border border-white/[0.07] bg-bone-900/70;
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.04),
-      0 12px 32px -16px rgb(0 0 0 / 0.7);
+    @apply rounded-[1.375rem] border border-ink-900/[0.06] bg-surface shadow-soft-lg;
   }
 
   .field {
-    @apply w-full rounded-xl border border-white/[0.07] bg-bone-900/60 px-3.5 py-2.5 text-[13.5px] text-bone-100 transition-colors duration-300 ease-out placeholder:text-bone-600 hover:border-white/[0.12] focus:border-signal-400/40 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0;
+    @apply w-full rounded-xl border border-ink-900/[0.07] bg-surface px-3.5 py-2.5 shadow-[inset_0_1px_2px_rgb(var(--shadow)/0.05)] text-[13.5px] text-ink-900 transition-colors duration-300 ease-out placeholder:text-ink-400 hover:border-ink-900/[0.12] focus:border-signal-500/50 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0;
   }
 }
 
 /* Engineering-paper dot grid, fixed and non-interactive. */
 .dot-grid {
-  background-image: radial-gradient(rgb(236 230 217 / 0.06) 1px, transparent 1px);
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
   background-size: 22px 22px;
   background-position: center top;
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 100%);
@@ -56,7 +125,7 @@
 
 /* Markdown inside assistant replies. */
 .md {
-  @apply text-[15px] leading-7 text-bone-200;
+  @apply text-[15px] leading-7 text-ink-800;
 }
 .md > * + * {
   margin-top: 0.85em;
@@ -64,7 +133,7 @@
 .md h1,
 .md h2,
 .md h3 {
-  @apply font-medium tracking-tight text-bone-50;
+  @apply font-medium tracking-tight text-ink-950;
 }
 .md h1 {
   @apply text-xl;
@@ -76,28 +145,28 @@
   @apply text-base;
 }
 .md ul {
-  @apply list-disc pl-5 marker:text-bone-600;
+  @apply list-disc pl-5 marker:text-ink-400;
 }
 .md ol {
-  @apply list-decimal pl-5 marker:text-bone-500;
+  @apply list-decimal pl-5 marker:text-ink-500;
 }
 .md li + li {
   margin-top: 0.3em;
 }
 .md a {
-  @apply text-signal-300 underline decoration-signal-300/30 underline-offset-4 hover:decoration-signal-300;
+  @apply text-signal-700 underline decoration-signal-600/30 underline-offset-4 hover:decoration-signal-600;
 }
 .md strong {
-  @apply font-semibold text-bone-50;
+  @apply font-semibold text-ink-950;
 }
 .md blockquote {
-  @apply border-l-2 border-bone-700 pl-4 text-bone-400;
+  @apply border-l-2 border-ink-300 pl-4 text-ink-600;
 }
 .md code {
-  @apply rounded-md bg-bone-800/80 px-1.5 py-0.5 font-mono text-[0.85em] text-bone-200;
+  @apply rounded-md bg-ink-150 px-1.5 py-0.5 font-mono text-[0.85em] text-ink-800;
 }
 .md pre {
-  @apply overflow-x-auto rounded-xl border border-white/[0.06] bg-bone-900 p-4;
+  @apply overflow-x-auto rounded-xl border border-ink-900/[0.06] bg-surface p-4 shadow-soft;
 }
 .md pre code {
   @apply bg-transparent p-0 text-[13px] leading-relaxed;
@@ -107,10 +176,10 @@
 }
 .md th,
 .md td {
-  @apply border-b border-white/[0.06] px-3 py-1.5 text-left;
+  @apply border-b border-ink-900/[0.06] px-3 py-1.5 text-left;
 }
 .md hr {
-  @apply border-white/[0.08];
+  @apply border-ink-900/[0.08];
 }
 
 @media (prefers-reduced-motion: reduce) {
