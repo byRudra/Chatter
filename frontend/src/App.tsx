@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AmbientBackground } from "./components/AmbientBackground";
 import { Composer } from "./components/Composer";
 import { Conversation } from "./components/Conversation";
+import { ArmedBadge, FailureLab } from "./components/FailureLab";
 import { GatewayCard } from "./components/GatewayCard";
 import { IslandHeader } from "./components/IslandHeader";
 import { Intro } from "./components/Intro";
@@ -15,7 +16,16 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState("");
 
-  const send = (text: string) => void chat.send(text, { systemPrompt });
+  const [armedFailure, setArmedFailure] = useState<string | null>(null);
+
+  const send = (text: string, simulate?: string) =>
+    void chat.send(text, { systemPrompt, simulate });
+
+  // An armed failure scenario applies to exactly one message.
+  const sendFromComposer = (text: string) => {
+    send(text, armedFailure ?? undefined);
+    setArmedFailure(null);
+  };
 
   return (
     <div className="grain relative min-h-[100dvh] bg-ink text-white">
@@ -33,6 +43,11 @@ export default function App() {
           <Intro sessionId={chat.sessionId} />
           <SystemPromptCard value={systemPrompt} onChange={setSystemPrompt} />
           <GatewayCard connection={connection} health={health} turns={chat.turns} />
+          <FailureLab
+            armed={armedFailure}
+            onArm={setArmedFailure}
+            enabledOnServer={health?.failure_simulation ?? null}
+          />
         </aside>
 
         <section className="flex min-h-0 flex-col" aria-label="Conversation">
@@ -40,12 +55,20 @@ export default function App() {
             <Conversation
               turns={chat.turns}
               pending={chat.pending}
-              onPickSuggestion={send}
-              onRetry={send}
+              onPickSuggestion={sendFromComposer}
+              onRetry={(text) => send(text)}
             />
           </div>
           <div className="pt-3">
-            <Composer busy={chat.pending} onSend={send} />
+            <Composer
+              busy={chat.pending}
+              onSend={sendFromComposer}
+              footer={
+                armedFailure && (
+                  <ArmedBadge header={armedFailure} onClear={() => setArmedFailure(null)} />
+                )
+              }
+            />
           </div>
         </section>
       </div>
