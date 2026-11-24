@@ -92,8 +92,11 @@ The real table adds a `role` check constraint, a foreign key to a small `session
 
 | | URL |
 |---|---|
-| Frontend | _coming soon_ |
-| Backend | _coming soon_ |
+| Frontend | https://frontend-production-632319cf.up.railway.app |
+| Backend | https://backend-production-51330a26.up.railway.app ([`/health`](https://backend-production-51330a26.up.railway.app/health)) |
+
+Both services run on [Railway](https://railway.com) from the same Dockerfiles used locally. The
+backend has a Railway volume mounted at `/data`, so chat history survives redeploys.
 
 ## 2. Run locally
 
