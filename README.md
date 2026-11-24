@@ -190,7 +190,8 @@ curl -s $API/sessions/demo-3/messages
 curl -s $API/chat -H 'content-type: application/json' -d '{"session_id":"demo-4","message":"My name is Ada."}'
 curl -s $API/chat -H 'content-type: application/json' -d '{"session_id":"demo-4","message":"What is my name?"}'
 # The second reply knows the name, and its input_tokens covers system + history + new message
-# for that request only, never a running total.
+# for that request only, never a running total. With gpt-oss models, output_tokens also
+# includes the model's hidden reasoning tokens, so it can exceed the visible reply's length.
 curl -s $API/sessions/demo-4/messages
 ```
 
