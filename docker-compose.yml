@@ -1,0 +1,31 @@
+name: chatter
+
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Always keep the database on the named volume inside the container.
+      DATABASE_URL: sqlite:////data/app.db
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
+    ports:
+      - "8000:8000"
+    volumes:
+      - chatter-data:/data
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    environment:
+      # The browser calls this URL directly, so it is the host-facing backend address.
+      API_BASE_URL: ${API_BASE_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  chatter-data:
