@@ -5,6 +5,7 @@ import { Conversation } from "./components/Conversation";
 import { ArmedBadge, FailureLab } from "./components/FailureLab";
 import { GatewayCard } from "./components/GatewayCard";
 import { IslandHeader } from "./components/IslandHeader";
+import { Reveal } from "./components/Reveal";
 import { Intro } from "./components/Intro";
 import { SystemPromptCard } from "./components/SystemPromptCard";
 import { useChat } from "./hooks/useChat";
@@ -40,14 +41,22 @@ export default function App() {
 
       <div className="relative z-10 mx-auto grid h-[100dvh] max-w-[1440px] gap-8 px-4 pb-4 pt-24 md:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12 lg:pb-8 lg:pt-28">
         <aside className="hidden min-h-0 flex-col gap-5 overflow-y-auto pb-2 lg:flex">
-          <Intro sessionId={chat.sessionId} />
-          <SystemPromptCard value={systemPrompt} onChange={setSystemPrompt} />
-          <GatewayCard connection={connection} health={health} turns={chat.turns} />
-          <FailureLab
-            armed={armedFailure}
-            onArm={setArmedFailure}
-            enabledOnServer={health?.failure_simulation ?? null}
-          />
+          <Reveal>
+            <Intro sessionId={chat.sessionId} />
+          </Reveal>
+          <Reveal delay={0.08}>
+            <SystemPromptCard value={systemPrompt} onChange={setSystemPrompt} />
+          </Reveal>
+          <Reveal delay={0.16}>
+            <GatewayCard connection={connection} health={health} turns={chat.turns} />
+          </Reveal>
+          <Reveal delay={0.24}>
+            <FailureLab
+              armed={armedFailure}
+              onArm={setArmedFailure}
+              enabledOnServer={health?.failure_simulation ?? null}
+            />
+          </Reveal>
         </aside>
 
         <section className="flex min-h-0 flex-col" aria-label="Conversation">
@@ -59,7 +68,7 @@ export default function App() {
               onRetry={(text) => send(text)}
             />
           </div>
-          <div className="pt-3">
+          <Reveal delay={0.12} className="pt-3">
             <Composer
               busy={chat.pending}
               onSend={sendFromComposer}
@@ -69,7 +78,7 @@ export default function App() {
                 )
               }
             />
-          </div>
+          </Reveal>
         </section>
       </div>
     </div>
