@@ -3,6 +3,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import Settings, get_settings
 from app.db import SessionStore
@@ -23,6 +24,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         yield
 
     app = FastAPI(title="Chatter API", version="1.0.0", lifespan=lifespan)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.allowed_origins,
+        allow_methods=["GET", "POST"],
+        # X-Simulate-Failure is sent by the frontend's failure lab.
+        allow_headers=["Content-Type", "X-Simulate-Failure"],
+    )
     register_error_handlers(app)
     app.include_router(health.router)
     app.include_router(sessions.router)
