@@ -19,6 +19,73 @@ flowchart LR
     KN -- "all failed" --> E[503 all providers unavailable]
 ```
 
+## Features
+
+**Chat**
+- A clean web UI for multi-turn conversations, with a new session on every page load.
+- An optional per-session system prompt.
+- Errors (422 validation, 503 all providers down, network) show as readable messages in the
+  chat, never a blank screen.
+
+**Per-reply metadata**, shown next to every assistant message:
+- resolution source: `LIVE_INFERENCE` or `LLM_CACHE`
+- the model that answered
+- latency in milliseconds
+- input and output tokens *for that request only*, never a running total
+- which key answered and how many keys failed first
+
+**Resilience**
+- A key pool of two or more API keys behind LiteLLM. When a key returns HTTP 429, a quota error
+  or a 5xx, the request automatically fails over to the next key.
+- A clean `503 {"detail": "all providers unavailable"}` when every key fails. The failed turn is
+  never saved to history.
+- An `X-Simulate-Failure` request header (for example `key_1=429`, `key_1=429,key_2=500`,
+  `*=429`) makes chosen keys fail for one request, so failover can be shown on demand. It's
+  enabled with `ENABLE_FAILURE_SIMULATION=true`.
+
+**Caching**
+- LiteLLM's built-in response cache, keyed on model + the full message list (system prompt +
+  history + new message). Asking the same first question in a new session returns `LLM_CACHE`
+  with the identical reply; any other message is a live call. Cache hits are much faster.
+
+**Storage**
+- Session history is stored in SQLite only (no Redis, no Postgres). The schema is created on
+  startup, and the database file sits on a Docker volume at `/data/app.db` (set with
+  `DATABASE_URL`), so history survives container restarts.
+
+**Ops**
+- `make up` starts the backend on :8000 and the frontend on :3000 using multi-stage Dockerfiles,
+  a root `docker-compose.yml` with a named `/data` volume, and environment-only configuration.
+- A backend test suite, plus CI on every pull request.
+
+### API
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/health` | `{"status":"ok","keys_configured":2,"cache_enabled":true}` once the DB and key pool are ready |
+| `POST` | `/chat` | `{session_id, message, system_prompt?}` → `{session_id, reply, metadata}` |
+| `GET` | `/sessions/{session_id}/messages` | Stored history, oldest first, without the system prompt; 404 if unknown |
+
+`metadata` holds `resolution_source`, `model`, `latency_ms`, `input_tokens`, `output_tokens`,
+`key_id` (`null` on a cache hit; never the key itself) and `fallback_attempts`. Every error
+is JSON with a `detail` field.
+
+The `messages` table:
+
+```sql
+CREATE TABLE messages (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL,
+    role       TEXT NOT NULL,   -- 'user' or 'assistant'
+    content    TEXT NOT NULL,
+    metadata   TEXT,            -- JSON string, assistant messages only
+    created_at TEXT NOT NULL    -- server time, ISO-8601
+);
+```
+
+The real table adds a `role` check constraint, a foreign key to a small `sessions` table
+(which stores each session's system prompt override) and an index on `(session_id, id)`.
+
 ---
 
 ## 1. Live URLs
@@ -237,8 +304,12 @@ request, along with the frontend build and a Docker Compose smoke test.
 - **`failure_simulation` in `/health`:** an extra field, so the UI can tell whether the hook is
   enabled on the server.
 - **CI:** ruff, pytest, the TypeScript build and a full `docker compose` smoke test on every PR.
-- **Thoughtful error UX:** status-specific error cards with retry, a 4000-character counter, and
-  Enter to send / Shift+Enter for a new line.
+- **Key route on every reply:** a failover shows as ~~key_1~~ → key_2 in the metadata line, so
+  you can see what happened at a glance.
+- **Light and dark themes:** a soft, warm UI with a toggle that remembers your choice and
+  follows your system setting on first visit, with no flash on load.
+- **Thoughtful error UX:** status-specific error messages with retry, a 4000-character counter,
+  and Enter to send / Shift+Enter for a new line.
 
 ---
 
