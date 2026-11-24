@@ -28,4 +28,14 @@ def build_router(settings: Settings) -> Router:
         }
         for key_id, api_key in zip(ids, settings.llm_api_keys, strict=True)
     ]
-    return Router(model_list=model_list)
+    return Router(
+        model_list=model_list,
+        # key_1 -> key_2 -> ... -> key_N, always in pool order, so fallback_attempts is
+        # simply the answering key's position in the chain.
+        fallbacks=[{ids[0]: ids[1:]}] if len(ids) > 1 else [],
+        # Fail over immediately instead of retrying a key that just returned 429/5xx.
+        num_retries=0,
+        # No cooldowns: a key that failed (or was made to fail by the simulation hook)
+        # is still tried first on the next request, which keeps behaviour per-request.
+        disable_cooldowns=True,
+    )
