@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AmbientBackground } from "./components/AmbientBackground";
+import { Conversation } from "./components/Conversation";
 import { IslandHeader } from "./components/IslandHeader";
 import { Intro } from "./components/Intro";
 import { useChat } from "./hooks/useChat";
@@ -24,7 +25,15 @@ export default function App() {
           <Intro sessionId={chat.sessionId} />
         </aside>
 
-        <section className="flex min-h-0 flex-col" aria-label="Conversation" />
+        <section className="flex min-h-0 flex-col" aria-label="Conversation">
+          <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+            <Conversation
+              turns={chat.turns}
+              pending={chat.pending}
+              onPickSuggestion={(text) => void chat.send(text)}
+            />
+          </div>
+        </section>
       </div>
     </div>
   );
