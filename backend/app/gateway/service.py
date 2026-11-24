@@ -56,10 +56,17 @@ class Gateway:
         if self.router is None:
             raise ProvidersUnavailable("no api keys configured")
 
+        # While a failure simulation is active, skip cache *reads* so the request really
+        # walks the key pool; otherwise a previously cached message would hide the
+        # failover. The fresh reply is still written to the cache.
+        bypass_cache = bool(failure_plan)
         with simulated_failures(failure_plan or {}):
             try:
                 response: Any = await self.router.acompletion(
-                    model=self.key_ids[0], messages=messages, caching=True
+                    model=self.key_ids[0],
+                    messages=messages,
+                    caching=True,
+                    cache={"no-cache": bypass_cache},
                 )
             except Exception as exc:
                 logger.warning("All %d keys failed: %s", len(self.key_ids), _summary(exc))
