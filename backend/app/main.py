@@ -9,7 +9,7 @@ from app.config import Settings, get_settings
 from app.db import SessionStore
 from app.errors import register_error_handlers
 from app.gateway.service import Gateway
-from app.routes import health, sessions
+from app.routes import chat, health, sessions
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -35,6 +35,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     register_error_handlers(app)
     app.include_router(health.router)
+    app.include_router(chat.router)
     app.include_router(sessions.router)
     return app
 
