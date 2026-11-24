@@ -8,10 +8,12 @@ import { SystemPromptCard } from "./components/SystemPromptCard";
 import { TopBar } from "./components/TopBar";
 import { useChat } from "./hooks/useChat";
 import { useHealth } from "./hooks/useHealth";
+import { useTheme } from "./hooks/useTheme";
 
 export default function App() {
   const chat = useChat();
   const { connection, health } = useHealth();
+  const { theme, toggle: toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState("");
   const [armedFailure, setArmedFailure] = useState<string | null>(null);
@@ -38,7 +40,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-[100dvh] bg-canvas text-bone-100">
+    <div className="flex h-[100dvh] bg-canvas text-ink-900">
       <Sidebar
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
@@ -63,6 +65,8 @@ export default function App() {
           newChatDisabled={chat.pending}
           menuOpen={menuOpen}
           onOpenMenu={() => setMenuOpen(true)}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         <div className="relative min-h-0 flex-1 overflow-y-auto">
@@ -86,7 +90,7 @@ export default function App() {
               ) : undefined
             }
           />
-          <p className="mt-2 hidden text-center font-mono text-[10.5px] text-bone-500 sm:block">
+          <p className="mt-2 hidden text-center font-mono text-[10.5px] text-ink-500 sm:block">
             Cached by model and full conversation. Keys fail over in pool order.
           </p>
         </div>
