@@ -60,6 +60,7 @@ export function IslandHeader({
           onClick={onToggleMenu}
           aria-label={menuOpen ? "Close panel" : "Open panel"}
           aria-expanded={menuOpen}
+          aria-controls="side-panel"
           className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.06] ring-1 ring-white/[0.08] transition-colors duration-500 ease-spring hover:bg-white/[0.1] lg:hidden"
         >
           <span

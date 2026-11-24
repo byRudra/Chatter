@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AmbientBackground } from "./components/AmbientBackground";
 import { Composer } from "./components/Composer";
 import { Conversation } from "./components/Conversation";
@@ -19,6 +19,13 @@ export default function App() {
 
   const [armedFailure, setArmedFailure] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = (event: KeyboardEvent) => event.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [menuOpen]);
+
   const send = (text: string, simulate?: string) =>
     void chat.send(text, { systemPrompt, simulate });
 
@@ -26,6 +33,7 @@ export default function App() {
   const sendFromComposer = (text: string) => {
     send(text, armedFailure ?? undefined);
     setArmedFailure(null);
+    setMenuOpen(false);
   };
 
   return (
@@ -33,14 +41,23 @@ export default function App() {
       <AmbientBackground />
       <IslandHeader
         connection={connection}
-        onNewChat={chat.reset}
+        onNewChat={() => {
+          chat.reset();
+          setMenuOpen(false);
+        }}
         newChatDisabled={chat.pending}
         menuOpen={menuOpen}
         onToggleMenu={() => setMenuOpen((open) => !open)}
       />
 
       <div className="relative z-10 mx-auto grid h-[100dvh] max-w-[1440px] gap-8 px-4 pb-4 pt-24 md:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12 lg:pb-8 lg:pt-28">
-        <aside className="hidden min-h-0 flex-col gap-5 overflow-y-auto pb-2 lg:flex">
+        {/* One panel for every viewport: a column on desktop, a glass sheet on mobile. */}
+        <aside
+          id="side-panel"
+          className={`fixed inset-0 z-30 flex flex-col gap-5 overflow-y-auto bg-ink/85 px-4 pb-10 pt-24 backdrop-blur-3xl transition-all duration-700 ease-spring md:px-8 lg:visible lg:static lg:inset-auto lg:z-auto lg:min-h-0 lg:translate-y-0 lg:bg-transparent lg:px-0 lg:pb-2 lg:pt-0 lg:opacity-100 lg:backdrop-blur-none ${
+            menuOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-4 opacity-0"
+          }`}
+        >
           <Reveal>
             <Intro sessionId={chat.sessionId} />
           </Reveal>
