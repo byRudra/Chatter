@@ -15,9 +15,7 @@ def register_error_handlers(app: FastAPI) -> None:
     async def validation_error(_: Request, exc: RequestValidationError) -> JSONResponse:
         # Same shape as FastAPI's default, minus the echoed `input`/`ctx`, which can be
         # several kilobytes for an oversized message.
-        errors = [
-            {"type": e["type"], "loc": e["loc"], "msg": e["msg"]} for e in exc.errors()
-        ]
+        errors = [{"type": e["type"], "loc": e["loc"], "msg": e["msg"]} for e in exc.errors()]
         return JSONResponse(status_code=422, content={"detail": jsonable_encoder(errors)})
 
     @app.exception_handler(Exception)
