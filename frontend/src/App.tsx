@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AmbientBackground } from "./components/AmbientBackground";
+import { Composer } from "./components/Composer";
 import { Conversation } from "./components/Conversation";
 import { IslandHeader } from "./components/IslandHeader";
 import { Intro } from "./components/Intro";
@@ -32,6 +33,9 @@ export default function App() {
               pending={chat.pending}
               onPickSuggestion={(text) => void chat.send(text)}
             />
+          </div>
+          <div className="pt-3">
+            <Composer busy={chat.pending} onSend={(text) => void chat.send(text)} />
           </div>
         </section>
       </div>
