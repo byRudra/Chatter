@@ -95,6 +95,12 @@ The real table adds a `role` check constraint, a foreign key to a small `session
 | Frontend | _coming soon_ |
 | Backend | _coming soon_ |
 
+Both run on Render's free tier from [`render.yaml`](render.yaml): the backend as a Docker web
+service, the frontend as a static site. Free web services sleep after 15 minutes idle, so the
+first request after a pause takes about a minute, and there is no persistent disk, so chat
+history resets when the backend restarts. To deploy your own copy, open
+`https://render.com/deploy?repo=https://github.com/byRudra/Chatter` and enter `LLM_API_KEYS`.
+
 ## 2. Run locally
 
 ### With Docker
