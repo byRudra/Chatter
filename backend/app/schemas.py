@@ -59,3 +59,4 @@ class HealthResponse(BaseModel):
     keys_configured: int
     cache_enabled: bool
     failure_simulation: bool
+    model: str
